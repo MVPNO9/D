@@ -28,7 +28,7 @@ Tab:AddToggle({
 })
 
 -- Boss fighting script (Assuming AutoDoughtBoss is true)
-if _G.AutoDoughtBoss then
+if Tab.AutoDoughtBoss then
     pcall(function()
         -- Finding the Cake Prince or other bosses
         if game:GetService("Workspace").Enemies:FindFirstChild("Cake Prince [Lv. 2300] [Raid Boss]") then
