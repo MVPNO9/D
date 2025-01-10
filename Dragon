@@ -1,23 +1,55 @@
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Orion/main/source'))()
 local Window = OrionLib:MakeWindow({Name = "Title of the library", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
 local Tab = Window:MakeTab({
-	Name = "Tab 1",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+    Name = "Tab 1",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
 })
 local Section = Tab:AddSection({
-	Name = "Section"
+    Name = "Section"
 })
+
+-- Notification
 OrionLib:MakeNotification({
-	Name = "Title!",
-	Content = "Notification content... what will it say??",
-	Image = "rbxassetid://4483345998",
-	Time = 5
+    Name = "Title!",
+    Content = "Notification content... what will it say??",
+    Image = "rbxassetid://4483345998",
+    Time = 5
 })
+
+-- Toggle button for AutoDoughtBoss
 Tab:AddToggle({
-	Name = "This is a toggle!",
-	Default = false,
-	Callback = function(Value)
-		print(Value)
-	end    
+    Name = "This is a toggle!",
+    Default = false,
+    Callback = function(Value)
+        _G.AutoDoughtBoss = Value
+        print("AutoDoughtBoss is now: " .. tostring(Value))
+    end    
 })
+
+-- Boss fighting script (Assuming AutoDoughtBoss is true)
+if _G.AutoDoughtBoss then
+    pcall(function()
+        -- Finding the Cake Prince or other bosses
+        if game:GetService("Workspace").Enemies:FindFirstChild("Cake Prince [Lv. 2300] [Raid Boss]") then
+            for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                if v.Name == "Cake Prince [Lv. 2300] [Raid Boss]" then
+                    if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                        repeat
+                            task.wait() -- Simulating continuous action while AutoDoughtBoss is true
+                            AutoHaki() -- Assumed function to automatically apply haki
+                            EquipWeapon(_G.SelectWeapon) -- Assumed function to equip weapon
+                            v.HumanoidRootPart.CanCollide = false
+                            v.Humanoid.WalkSpeed = 0
+                            v.HumanoidRootPart.Size = Vector3.new(50, 50, 50)
+                            topos(v.HumanoidRootPart.CFrame * CFrame.new(2, 10, 5)) -- Move the player close to the boss
+                            game:GetService("VirtualUser"):CaptureController()
+                            game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672)) -- Simulate mouse click
+                            sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge) -- Increase simulation range
+                        until not _G.AutoDoughtBoss or not v.Parent or v.Humanoid.Health <= 0
+                    end
+                end
+            end
+        end
+    end)
+end
